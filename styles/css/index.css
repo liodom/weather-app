@@ -25,13 +25,14 @@ body, h4 {
   height: 30vh;
   width: 100vw;
   border: 2px solid green;
+  z-index: 1;
 }
-#weather-app #carosel {
+#weather-app #carousel {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  background-size: 10%;
+  background-repeat: no-repeat;
   background-color: yellow;
   z-index: -3;
 }
@@ -46,7 +47,7 @@ body, h4 {
   justify-content: center;
   align-items: center;
 }
-#weather-app #weather-app__recap #carosel-state {
+#weather-app #weather-app__recap #carousel-state {
   display: flex;
   justify-content: space-evenly;
   width: 50%;
@@ -56,7 +57,7 @@ body, h4 {
   position: relative;
   overflow: hidden;
 }
-#weather-app #weather-app__recap #carosel-state .carosel-state__sensor {
+#weather-app #weather-app__recap #carousel-state .carousel-state__sensor {
   align-self: center;
   height: 0.8em;
   width: 0.8em;
