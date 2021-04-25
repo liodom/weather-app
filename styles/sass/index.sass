@@ -1,0 +1,91 @@
+// styles reset
+body, h4
+   margin: 0
+   box-sizing: border-box
+   font-size: 16px
+
+#weather-app
+   // background-color: pink
+   width: 100vw
+   height: 100vh
+   position: relative   
+   overflow: hidden
+
+   #today-date
+      position: absolute
+      top: 0
+      left: 0
+      width: 100%
+      display: flex
+      justify-content: center
+
+   #swipe-area
+      position: absolute
+      top: 10vh
+      left: 0
+      height: 30vh
+      width: 100vw
+      border: 2px solid green 
+      
+   #carosel
+      position: absolute
+      top: 0
+      left: 0
+      width: 100vw
+      height: 100vh
+      background-color: yellow
+      z-index: -3
+
+   #weather-app__recap
+      // background-color: lightgreen
+      width: 90%
+      height: 45%
+      margin: 0 auto
+      text-align: center
+      border: 1px solid red
+      display: flex
+      flex-direction: column
+      justify-content: center
+      align-items: center
+
+      #carosel-state
+         display: flex
+         justify-content: space-evenly
+         width: 50%
+         border: 1px solid green
+         margin: 2em auto
+         height: 1.5em    
+         position: relative
+         overflow: hidden
+
+         .carosel-state__sensor
+            align-self: center
+            height: 0.8em
+            width: 0.8em
+            border-radius: 100%
+            background-color: white
+
+      #today-info
+         border: 1px solid blue
+         margin: 0 auto
+         width: 100%
+         height: 50%
+
+      
+   
+   #weather-app__days-week
+      width: 100vw
+      height: 10vh
+      display: flex
+      border: 3px dotted orange
+
+      .single-day__info
+         width: 3em
+         height: 3em
+         border: 1px solid white
+         display: flex
+         justify-content: center
+         align-items: center
+         // align-self: center
+
+      

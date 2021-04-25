@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="styles/css/index.css">
+   <title>Weather Widget App</title>
+</head>
+<body>
+   <section id="weather-app">
+      <div id="swipe-area"></div>
+      <div id="carosel">
+         <img src="#" alt="">
+      </div>
+      <div id="today-date">Today, April 22</div>
+      <section id="weather-app__recap">
+         <section id="carosel-state">
+            <div class="carosel-state__sensor"></div>
+            <div class="carosel-state__sensor"></div>
+            <div class="carosel-state__sensor"></div>
+            <div class="carosel-state__sensor"></div>
+            <div class="carosel-state__sensor"></div>
+         </section>
+         <section id="today-info">
+            <div id="today-info__current">
+               <div id="today-info__city">MILANO</div>
+               <div id="today-info__weather-status">Rainy</div>
+               <div id="today-info__current-temp">21</div>
+            </div>
+            <div class="today-info__min-max-temp">12/32</div>
+         </section>
+      </section>
+      <section id="weather-app__days-week">
+         <div class="day__info">
+            <h4 class="day__text">MON</h3>
+            <img src="#" alt="day icon" class="day-icon">
+            <span class="temp__min-max">12/34</span>
+         </div>
+         <div class="single-day__info">TUE</div>
+         <div class="single-day__info">MER</div>
+         <div class="single-day__info">THU</div>
+         <div class="single-day__info">FRI</div>
+         <div class="single-day__info">SAB</div>
+         <div class="single-day__info">SUN</div>
+      </section>
+   </section>  
+   <script src="./script.js"></script>
+</body>
+</html>
