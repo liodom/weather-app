@@ -1,4 +1,3 @@
-// const track = document.querySelector(".track");
 const track = document.querySelector("#swipe-area");
 let initialPosition = null;
 let moving = false;
@@ -15,62 +14,47 @@ let cities = [
             {
               index: 0,
               name: 'Milan',
-              imgSrc: './assets/milan/milan-duomo-2.jpg',
-              weatherStatus: 'sunny',  //placeholder
-              currentTemp: 34,  //placeholder
-              tempMin: 23,  //placeholder
-              tempMax: 36,  //placeholder
+              imgSrc: './assets/milan/milan-duomo-5.jpg',
               latitude: 45.27,
               longitude: 9.09,
               weather: null,
+              active: true
             },
             {
               index: 1,
               name: 'Bangkok',
-              imgSrc: './assets/bangkok/bangkok-1.jpg',
-              weatherStatus: 'rainy',  //placeholder
-              currentTemp: 14,  //placeholder
-              tempMin: 3,  //placeholder
-              tempMax: 26,  //placeholder
+              imgSrc: './assets/bangkok/bangkok-5.jpg',
               latitude: 13.73,
               longitude: 100.52,
               weather: null,
+              active: false
             },
             {
               index: 2,
               name: 'London',
               imgSrc: '',
-              weatherStatus: 'sunny',  //placeholder
-              currentTemp: 32,  //placeholder
-              tempMin: 30,  //placeholder
-              tempMax: 41,  //placeholder
               latitude: 51.51,
               longitude: -0.11,
               weather: null,
+              active: false
             },
             {
               index: 3,
               name: 'Nairobi',
               imgSrc: '',
-              weatherStatus: 'sunny',  //placeholder
-              currentTemp: 32,  //placeholder
-              tempMin: 12,  //placeholder
-              tempMax: 36,  //placeholder
               latitude: -1.28,
               longitude: 36.81,
               weather: null,
+              active: false
             },
             {
               index: 4,
               name: 'Los Angeles',
               imgSrc: '',
-              weatherStatus: 'cloudy',  //placeholder
-              currentTemp: 18,  //placeholder
-              tempMin: 15,  //placeholder
-              tempMax: 27,  //placeholder
               latitude: 34.05,
               longitude: -118.24,
               weather: null,
+              active: false
             },
       ]
   },
@@ -91,31 +75,11 @@ const handleScreenOrientation = () => {
   }
 };
 
-const weatherDataMilan = async () => {
-  const myAPIKey = '2d6ebfd28fe3605c83bebbfd9a7532fa';
-  const milanLatitude = 45.27;
-  const milanLongitude = 9.09;
-  const dataToExclude = 'hourly,alerts,minutely';
-  let myUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${milanLatitude}&lon=${milanLongitude}&exclude=${dataToExclude}&appid=${myAPIKey}`;
-
-  const response = await fetch(myUrl);
-
-  /* Fetch request Error handling */
-  if(!response.ok){
-    const message = `An error has occured: ${respose.status}`;
-    throw new Error(message);
-  }
-
-  const responseJSON = await response.json();
-  return responseJSON;
-}
-
 const fetchAllCitiesWeather = async () => {
   const myAPIKey = '2d6ebfd28fe3605c83bebbfd9a7532fa';
   const dataToExclude = 'hourly,alerts,minutely';
   const citiesLatLong = cities[0].list.map(city => [city.latitude, city.longitude]);
   const [milanLatLong, bangkokLatLong, londonLatLong, nairobiLatLong, losAngelesLatLong] = citiesLatLong;
-  console.log('fetchAllCitiesWeather => citiesLatLong => ', citiesLatLong);
   const [milanResponse, bangkokResponse, londonResponse, nairobiResponse, losAngelesResponse] = await Promise.all([
     fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${milanLatLong[0]}&lon=${milanLatLong[1]}&units=metric&exclude=${dataToExclude}&appid=${myAPIKey}`),
     fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${bangkokLatLong[0]}&lon=${bangkokLatLong[1]}&units=metric&exclude=${dataToExclude}&appid=${myAPIKey}`),
@@ -143,6 +107,7 @@ handleScreenOrientation();
 
 const initData = () => {
   handleScreenOrientation();
+
 
   fetchAllCitiesWeather().then(([milanWeatherData, bangkokWeatherData, londonWeatherData, nairobiWeatherData, losAngelesWeatherData]) => {
     console.log('cities[0].list => ', cities[0].list);
@@ -177,140 +142,228 @@ const initData = () => {
 
 };
 
-// initData();
+initData();
 
-const carouselDataHandler = (cities) => {
-  const carouselData = [];
-  for (city of cities){
-    carouselData.push(city)
-  }
-  console.log('carouselDataHandler => carouselData => ', carouselData);
+Storage.prototype.setObj = function(key, obj) {
+  return this.setItem(key, JSON.stringify(obj))
+}
+Storage.prototype.getObj = function(key) {
+  return JSON.parse(this.getItem(key))
 }
 
-fetchAllCitiesWeather().then(data => {
+const getDay = (num) => {
+  let newDay = new Date().getDay() + num;
+  if (newDay > 6){
+    newDay = newDay - 7;
+  }
+  switch(newDay){
+    case 0:
+      return 'SUN';
+    case 1:
+      return 'MON';
+    case 2:
+      return 'TUE';
+    case 3:
+      return 'WED';
+    case 4:
+      return 'THU';
+    case 5:
+      return 'FRI';
+    case 6:
+      return 'SAT';
+    default:
+      return;
+  }
+}
+
+if (window.localStorage.length === 0){
+  fetchAllCitiesWeather().then(data => {
+    const newCurrentCity = data[0];
+
+    const todayInfoCity = document.getElementById('today-info__city');
+    todayInfoCity.textContent = cities[0].list[0].name;
+
+    const todayInfoWeatherStatus = document.getElementById('today-info__weather-status');
+    todayInfoWeatherStatus.textContent = newCurrentCity.current.weather[0].main;
+
+    const todayInfoCurrentTemp = document.getElementById('today-info__current-temp');
+    todayInfoCurrentTemp.textContent = `${Math.round(newCurrentCity.current.temp)}°`;
+
+    const todayInfoMinMaxTemp = document.getElementById('today-info__min-max-temp');
+    todayInfoMinMaxTemp.textContent = `${Math.round(newCurrentCity.daily[0].temp.min)}°/${Math.round(newCurrentCity.daily[0].temp.max)}°`;
+    
+
+    for(let i = 0; i < data[0].daily.length-1; i++){
+      const dayText = document.createElement('h4');
+      dayText.setAttribute('class', 'day__text')
+      dayText.textContent = getDay(i);
+
+      const dayIcon = document.createElement('img');
+      dayIcon.setAttribute('class', 'day-icon');
+      dayIcon.setAttribute('src', `http://openweathermap.org/img/wn/${data[0].daily[i].weather[0].icon}@2x.png`);
+      dayIcon.setAttribute('alt', 'day icon');
+
+      const tempMinMax = document.createElement('span');
+      tempMinMax.setAttribute('class', 'temp__min-max');
+      tempMinMax.textContent = `${Math.round(data[0].daily[i].temp.min)}°/${Math.round(data[0].daily[i].temp.max)}°`;
+      
+      const dayInfo = document.createElement('div');
+      dayInfo.setAttribute('class', 'day__info');
+      dayInfo.appendChild(dayText);
+      dayInfo.appendChild(dayIcon);
+      dayInfo.appendChild(tempMinMax);
+
+      const weatherAppDaysWeek = document.getElementById('weather-app__days-week');
+      weatherAppDaysWeek.appendChild(dayInfo);
+    }
+    
+    window.localStorage.setObj('weatherData', data);
+    window.localStorage.setObj('currentDay', new Date().toISOString().slice(0, 10))
+
+
+    const pastActiveCarousel = document.getElementById(`carousel-state__sensor-${currentIndex + 1 > cities[0].list.length - 1 ? 0 : currentIndex + 1}`);
+    pastActiveCarousel.classList.remove('carousel-active');
+  
+    const nextActiveCarousel = document.getElementById(`carousel-state__sensor-${currentIndex - 1 < 0 ? cities[0].list.length - 1 : currentIndex - 1}`);
+    nextActiveCarousel.classList.remove('carousel-active');
+
+    console.log('localStorage => ', localStorage.getObj('weatherData'));
+  });
+} else {
+
+  console.log('localStorage is not Empty');
+
+  const data = localStorage.getObj('weatherData');
   const newCurrentCity = data[0];
-  console.log('newCurrentCity => ', newCurrentCity);
-  carouselDataHandler(data);
-
-  let carouselStateFragment = document.createDocumentFragment();
-  for (let i = 1; i <= 5; i++){
-    const carouselStateSensor = document.createElement('div');
-    carouselStateSensor.setAttribute('class', 'carousel-state__sensor');
-    carouselStateFragment.appendChild(carouselStateSensor);
-  }
-  const carouselState = document.getElementById('carousel-state');
-  carouselState.appendChild(carouselStateFragment);
-
-  console.log('carouselStateFragment => ', carouselStateFragment);
-
-
-  const todayInfoCurrent = document.createElement('div');
-  todayInfoCurrent.setAttribute('id', 'today-info__current');
-  const todayInfoCity = document.createElement('div');
-  todayInfoCity.setAttribute('id', 'today-info__city');
+  
+  const todayInfoCity = document.getElementById('today-info__city');
   todayInfoCity.textContent = cities[0].list[0].name;
-  const todayInfoWeatherStatus = document.createElement('div');
-  todayInfoWeatherStatus.setAttribute('id', 'today-info__weather-status');
-  todayInfoWeatherStatus.textContent = newCurrentCity.current.weather[0].description;
-  const todayInfoCurrentTemp = document.createElement('div');
-  todayInfoCurrentTemp.setAttribute('id', 'today-info__current-temp');
-  todayInfoCurrentTemp.textContent = `${Math.floor(newCurrentCity.current.temp)}`;
-  const todayInfoMinMaxTemp = document.createElement('div');
-  todayInfoMinMaxTemp.setAttribute('id', 'today-info__min-max-temp');
-  todayInfoMinMaxTemp.textContent = `${Math.floor(newCurrentCity.daily[0].temp.min)}/${Math.floor(newCurrentCity.daily[0].temp.max)}`;
-
-  let todayInfoCurrentFragment = document.createDocumentFragment();
-  todayInfoCurrentFragment.appendChild(todayInfoCity);
-  todayInfoCurrentFragment.appendChild(todayInfoWeatherStatus);
-  todayInfoCurrentFragment.appendChild(todayInfoCurrentTemp);
-
-  console.log('todayInfoCurrentFragment => ', todayInfoCurrentFragment);
-
-  const todayInfo = document.getElementById('today-info');
-  todayInfo.appendChild(todayInfoCurrentFragment);
-  todayInfo.appendChild(todayInfoMinMaxTemp);
-
-  const weatherAppRecap = document.getElementById('weather-app__recap');
-  weatherAppRecap.appendChild(carouselState);
-  weatherAppRecap.appendChild(todayInfo);
-});
-
-// const carouselElement = document.getElementById('carousel');
-// const todayInfoElement = document.getElementById('today-info');
-// const todayInfoCurrent = document.createElement('div');
-// todayInfoCurrent.setAttribute('id', 'today-info__current');
-// const todayInfoCity = document.createElement('div');
-// todayInfoCity.setAttribute('id', 'today-info__city');
-// todayInfoCity.textContent = cities[0].name;
-// const todayInfoWeatherStatus = document.createElement('div');
-// todayInfoWeatherStatus.setAttribute('id', 'today-info__weather-status');
-// todayInfoWeatherStatus.textContent = cities[0].weather.current.weather[0].description;
-// const todayInfoCurrentTemp = document.createElement('div');
-// todayInfoCurrentTemp.setAttribute('id', 'today-info__current-temp');
-// todayInfoCurrentTemp.textContent = `${cities[0].weather.current.temp}°C`;
-// const todayInfoMinMaxTemp = document.createElement('div');
-// todayInfoMinMaxTemp.setAttribute('id', 'today-info__min-max-temp');
-// todayInfoMinMaxTemp.textContent = `${cities[0].weather.daily[0].temp.min}°C/${cities[0].weather.daily[0].temp.max}°C}°C`;
-
-// let todayInfoCurrentFragment = document.createrDocumentFragment();
-// todayInfoCurrentFragment.appendChild(todayInfoCity);
-// todayInfoCurrentFragment.appendChild(todayInfoWeatherStatus);
-// todayInfoCurrentFragment.appendChild(todayInfoCurrentTemp);
-
-// console.log('todayInfoCurrentFragment => ', todayInfoCurrentFragment);
-
-const loadCarousel = () => {
-  const carouselElement = document.getElementById('carousel');
-  carouselElement.setAttribute('src', cities[0].list[0].imgSrc);
-  console.log('carouselElement => ', carouselElement);
-}
-const loadTodayInfo = () => {
-  const todayInfoElement = document.getElementById('today-info');
-  const todayInfoCurrent = document.getElementById('today-info__current');
-  const todayInfoCity = document.getElementById('today-info__city'); 
-
-  // todayInfoCity.textContent = cities[0].list[0].name;
-console.log('todayInfoCity => ', todayInfoCity)
-
-  todayInfoCurrent.appendChild(todayInfoCity);
-  todayInfoElement.appendChild(todayInfoCurrent);
 
   const todayInfoWeatherStatus = document.getElementById('today-info__weather-status');
+  todayInfoWeatherStatus.textContent = newCurrentCity.current.weather[0].main;
+
   const todayInfoCurrentTemp = document.getElementById('today-info__current-temp');
+  todayInfoCurrentTemp.textContent = `${Math.round(newCurrentCity.current.temp)}°`;
+
   const todayInfoMinMaxTemp = document.getElementById('today-info__min-max-temp');
-  // todayInfoElement.appendChild();
-  console.log('todayInfoElement => ', todayInfoElement);
+  todayInfoMinMaxTemp.textContent = `${Math.round(newCurrentCity.daily[0].temp.min)}°/${Math.round(newCurrentCity.daily[0].temp.max)}°`;
+
+  for(let i = 0; i < data[0].daily.length-1; i++){
+
+    const dayText = document.createElement('h4');
+    dayText.setAttribute('class', 'day__text')
+    dayText.textContent = getDay(i);
+
+    const dayIcon = document.createElement('img');
+    dayIcon.setAttribute('class', 'day-icon');
+    dayIcon.setAttribute('src', `http://openweathermap.org/img/wn/${data[0].daily[i].weather[0].icon}@2x.png`);
+    dayIcon.setAttribute('alt', 'day icon');
+
+    const tempMinMax = document.createElement('span');
+    tempMinMax.setAttribute('class', 'temp__min-max');
+    tempMinMax.textContent = `${Math.round(data[0].daily[i].temp.min)}°/${Math.round(data[0].daily[i].temp.max)}°`;
+    
+    const dayInfo = document.createElement('div');
+    dayInfo.setAttribute('class', 'day__info');
+    dayInfo.appendChild(dayText);
+    dayInfo.appendChild(dayIcon);
+    dayInfo.appendChild(tempMinMax);
+
+    const weatherAppDaysWeek = document.getElementById('weather-app__days-week');
+    weatherAppDaysWeek.appendChild(dayInfo);
+
+
+    const pastActiveCarousel = document.getElementById(`carousel-state__sensor-${currentIndex + 1 > cities[0].list.length - 1 ? 0 : currentIndex + 1}`);
+    pastActiveCarousel.classList.remove('carousel-active');
+  
+    const nextActiveCarousel = document.getElementById(`carousel-state__sensor-${currentIndex - 1 < 0 ? cities[0].list.length - 1 : currentIndex - 1}`);
+    nextActiveCarousel.classList.remove('carousel-active');
+
+    const activeCarousel = document.getElementById(`carousel-state__sensor-${currentIndex}`);
+    activeCarousel.classList.add('carousel-active');
+  }
 }
 
-const initApp = () => {
-  loadCarousel();
-  loadTodayInfo();
-  // loadWeekInfo();
-  // loadChart();
+const loadCurrentDayData = () => {
+  /* START */
+  const currentCity = cities[0].list[currentIndex];
+  console.log('currentCity => ', currentCity)
+
+  const pastActiveCarousel = document.getElementById(`carousel-state__sensor-${currentIndex + 1 > cities[0].list.length - 1 ? 0 : currentIndex + 1}`);
+  pastActiveCarousel.classList.remove('carousel-active');
+
+  const nextActiveCarousel = document.getElementById(`carousel-state__sensor-${currentIndex - 1 < 0 ? cities[0].list.length - 1 : currentIndex - 1}`);
+  nextActiveCarousel.classList.remove('carousel-active');
+
+  document.body.style.backgroundImage = `url(${currentCity.imgSrc})`;
+  
+  cities[0].list.map(city => city.active = false);
+  currentCity.active = true;
+
+  const todayInfoCity = document.getElementById('today-info__city');
+  todayInfoCity.textContent = currentCity.name;
+
+  const todayInfoWeatherStatus = document.getElementById('today-info__weather-status');
+  todayInfoWeatherStatus.textContent = currentCity.weather.current.weather[0].description;
+
+  const todayInfoCurrentTemp = document.getElementById('today-info__current-temp');
+  todayInfoCurrentTemp.textContent = `${Math.round(currentCity.weather.current.temp)}°`;
+
+  const todayInfoMinMaxTemp = document.getElementById('today-info__min-max-temp');
+  todayInfoMinMaxTemp.textContent = `${Math.round(currentCity.weather.daily[0].temp.min)}°/${Math.round(currentCity.weather.daily[0].temp.max)}°`;
+
+  const oldWeatherAppDaysWeek = document.getElementById('weather-app__days-week');
+  oldWeatherAppDaysWeek.parentNode.removeChild(oldWeatherAppDaysWeek);
+
+  const newWeatherAppDaysWeek = document.createElement('section');
+  newWeatherAppDaysWeek.setAttribute('id', 'weather-app__days-week');
+
+  for (let i = 0; i < currentCity.weather.daily.length - 1; i++) {
+    const dayText = document.createElement('h4');
+    dayText.setAttribute('class', 'day__text')
+    dayText.textContent = getDay(i);
+
+    const dayIcon = document.createElement('img');
+    dayIcon.setAttribute('class', 'day-icon');
+    dayIcon.setAttribute('src', `http://openweathermap.org/img/wn/${currentCity.weather.daily[i].weather[0].icon}@2x.png`);
+    dayIcon.setAttribute('alt', 'day icon');
+
+    const tempMinMax = document.createElement('span');
+    tempMinMax.setAttribute('class', 'temp__min-max');
+    tempMinMax.textContent = `${Math.round(currentCity.weather.daily[i].temp.min)}°/${Math.round(currentCity.weather.daily[i].temp.max)}°`;
+    console.log('currentCity.weather.daily[i].temp.min => ', currentCity.weather.daily[i].temp.min);
+
+    const dayInfo = document.createElement('div');
+    dayInfo.setAttribute('class', 'day__info');
+    dayInfo.appendChild(dayText);
+    dayInfo.appendChild(dayIcon);
+    dayInfo.appendChild(tempMinMax);
+
+    newWeatherAppDaysWeek.appendChild(dayInfo);
+  }
+
+  const weatherApp = document.getElementById('weather-app');
+  weatherApp.appendChild(newWeatherAppDaysWeek);
+
+  const activeCarousel = document.getElementById(`carousel-state__sensor-${currentIndex}`);
+  activeCarousel.classList.add('carousel-active');
+  console.log('activeCarousel => ', activeCarousel);
+
+  /* END */
+
 }
-
-initApp();
-
-
 
 const sliderRightHandler = () => {
   currentIndex--;
   if(currentIndex < 0) currentIndex = cities[0].list.length - 1;
-  const currentCity = cities[0].list[currentIndex];
-  carouselElement.setAttribute('src', currentCity.imgSrc);
 
-
-  console.log('sliderRightHandler => currentIndex => ', currentIndex);
-  console.log('sliderRightHandler => currrentCity => ', currentCity);
+  loadCurrentDayData();
 }
 const sliderLeftHandler = () => {
   currentIndex++;
   if(currentIndex === cities[0].list.length) currentIndex = 0;
-  const currentCity = cities[0].list[currentIndex];
-  carouselElement.setAttribute('src', currentCity.imgSrc);
 
-  console.log('sliderLeftHandler => currentIndex => ', currentIndex);
-  console.log('sliderLeftHandler => currrentCity => ', currentCity);
+  loadCurrentDayData();
 }
 
 const gestureStart = (e) => {
@@ -329,12 +382,10 @@ const gestureMove = (e) => {
     track.style.transform = `translateX(${diff}px)`;
     console.log("diff => ", diff);
 
-    if (diff < -5) {
-      alert("we are moving left");
+    if (diff < -10) {
       sliderLeftHandler();
       diff = 0;
-    } else if (diff > 5) {
-      alert("we are moving right");
+    } else if (diff > 10) {
       sliderRightHandler();
       diff = 0;
     }
@@ -352,24 +403,28 @@ if (window.PointerEvent && window.screen.width < 768) {
 
   window.addEventListener("pointerup", gestureEnd);
 }
-/*
-else {
-  window.addEventListener("pointerdown", gestureStart);
 
-  window.addEventListener("pointermove", gestureMove);
-
-  window.addEventListener("pointerup", gestureEnd);
+const removeHandlers = () => {
+  if (window.screen.width > 768) {
+    window.removeEventListener("pointerdown", gestureStart);
+    window.removeEventListener("pointermove", gestureMove);
+    window.removeEventListener("pointerup", gestureEnd);
+  }
 }
-*/
 
+window.addEventListener('resize', () => {
+  removeHandlers();
+  if (window.PointerEvent && window.screen.width < 768) {
+    window.addEventListener("pointerdown", gestureStart);
+  
+    window.addEventListener("pointermove", gestureMove);
+  
+    window.addEventListener("pointerup", gestureEnd);
+  }
+});
 
+const leftButtonHandler = document.getElementById('left-chevron');
+leftButtonHandler.setAttribute('onclick', 'sliderRightHandler()');
 
-// const sliderHandler = () => {
-//   nextIndex = currentIndex >= 0 && currentIndex < cities[0].list.length - 1 ? currentIndex + 1 : 0;
-//   console.log('nextIndex => ', nextIndex);
-// }
-
-// const fetchWeather = async => {
-//   let url = 
-// }
-
+const rightButtonHandler = document.getElementById('right-chevron');
+rightButtonHandler.setAttribute('onclick', 'sliderLeftHandler()');
