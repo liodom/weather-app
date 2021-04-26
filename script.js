@@ -218,17 +218,13 @@ fetchAllCitiesWeather().then(data => {
 
   const activeCarousel = document.getElementById(`carousel-state__sensor-${0}`);
   activeCarousel.classList.add('carousel-active');
-  console.log('activeCarousel ', activeCarousel)
 
   document.body.style.backgroundImage = `url(${cities[0].list[0].imgSrc})`;
-
-  console.log('localStorage.length => ', localStorage.length);
 });
 
 const loadCurrentDayData = () => {
   /* START */
   const currentCity = cities[0].list[currentIndex];
-  console.log('currentCity => ', currentCity)
 
   const pastActiveCarousel = document.getElementById(`carousel-state__sensor-${currentIndex + 1 > cities[0].list.length - 1 ? 0 : currentIndex + 1}`);
   pastActiveCarousel.classList.remove('carousel-active');
