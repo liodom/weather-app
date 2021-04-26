@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Abel&family=Maven+Pro&family=Rajdhani&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=PT+Sans&display=swap");
 body, html, h1, h2, h3, p, span, h4 {
   margin: 0;
 }
@@ -73,20 +75,24 @@ body {
 #weather-app #weather-app__recap #today-info #today-info__current {
   display: flex;
   flex-direction: column;
+  font-family: "Prompt", sans-serif;
 }
 #weather-app #weather-app__recap #today-info #today-info__current #today-info__city {
-  font-size: 1.5em;
+  font-size: 1.6em;
   margin-bottom: 0.3em;
-  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  font-family: "Maven Pro", sans-serif;
   margin-top: 1em;
   font-weight: 200;
 }
 #weather-app #weather-app__recap #today-info #today-info__current #today-info__weather-status {
-  font-size: 1.3em;
+  font-size: 1.1em;
+  font-weight: 300;
+  font-family: "Prompt", sans-serif;
 }
 #weather-app #weather-app__recap #today-info #today-info__current #today-info__current-temp {
-  font-size: 6em;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-size: 8em;
+  font-weight: 300;
+  font-family: "Maven Pro", sans-serif;
 }
 #weather-app #weather-app__days-week {
   width: 90%;
@@ -94,6 +100,7 @@ body {
   display: flex;
   flex-direction: row;
   margin-top: 8em;
+  font-family: "Maven Pro", sans-serif;
 }
 #weather-app #weather-app__days-week .day__info {
   width: 15%;
@@ -109,44 +116,39 @@ body {
 #weather-app #weather-app__days-week .day__info .day-icon {
   max-width: 40px;
   margin: 0;
+  filter: grayscale(100%);
 }
 #weather-app #weather-app__days-week .day__info .temp__min-max {
   font-size: 0.8em;
   font-weight: 400;
+  font-family: "Maven Pro", sans-serif;
 }
 
-@media screen and (orientation: landscape) {
-  #weather-app {
-    width: auto;
-    height: 70vh;
-  }
-}
 @media screen and (min-width: 768px) {
   body {
     background-size: cover;
   }
-
-  #weather-app {
+  body #weather-app {
     height: 100vh;
     width: 70vw;
     margin: 0 auto;
     display: flex;
     flex-direction: row;
   }
-  #weather-app #weather-app__recap {
+  body #weather-app #weather-app__recap {
     width: 60vw;
     height: 70vh;
     margin-left: 5em;
     display: grid;
     grid-template-columns: repeat(12, 1fr);
   }
-  #weather-app #weather-app__recap #carousel-state {
+  body #weather-app #weather-app__recap #carousel-state {
     grid-column: 5/10;
     grid-row: 1;
     width: 300px;
     height: 50px;
   }
-  #weather-app #weather-app__recap #carousel-state .carousel-state__sensor {
+  body #weather-app #weather-app__recap #carousel-state .carousel-state__sensor {
     align-self: center;
     height: 1.4em;
     width: 1.4em;
@@ -154,7 +156,7 @@ body {
     border-radius: 100%;
     background-color: none;
   }
-  #weather-app #weather-app__recap #left-chevron {
+  body #weather-app #weather-app__recap #left-chevron {
     display: inline-block;
     grid-column: 2/3;
     grid-row: 2;
@@ -163,30 +165,30 @@ body {
     border-radius: 100%;
     background-color: white;
   }
-  #weather-app #weather-app__recap #left-chevron:hover {
+  body #weather-app #weather-app__recap #left-chevron:hover {
     cursor: pointer;
   }
-  #weather-app #weather-app__recap #right-chevron {
+  body #weather-app #weather-app__recap #today-info {
+    height: 300px;
+    grid-column: 4/8;
+    grid-row: 2;
+  }
+  body #weather-app #weather-app__recap #today-info #today-info__weather-status {
+    height: 40px;
+  }
+  body #weather-app #weather-app__recap #right-chevron {
     display: inline-block;
-    grid-column: 7/8;
+    grid-column: 9/10;
     grid-row: 2;
     width: 80px;
     height: 80px;
     border-radius: 100%;
     background-color: white;
   }
-  #weather-app #weather-app__recap #right-chevron:hover {
+  body #weather-app #weather-app__recap #right-chevron:hover {
     cursor: pointer;
   }
-  #weather-app #weather-app__recap #today-info {
-    height: 300px;
-    grid-column: 4/6;
-    grid-row: 2;
-  }
-  #weather-app #weather-app__recap #today-info #today-info__weather-status {
-    height: 40px;
-  }
-  #weather-app #weather-app__days-week {
+  body #weather-app #weather-app__days-week {
     width: 10vw;
     height: 90%;
     margin-right: 8em;

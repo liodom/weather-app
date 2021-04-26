@@ -14,7 +14,7 @@ let cities = [
             {
               index: 0,
               name: 'Milan',
-              imgSrc: './assets/milan/milan-duomo-5.jpg',
+              imgSrc: './assets/milan/milan-7.jpg',
               latitude: 45.27,
               longitude: 9.09,
               weather: null,
@@ -23,7 +23,7 @@ let cities = [
             {
               index: 1,
               name: 'Bangkok',
-              imgSrc: './assets/bangkok/bangkok-5.jpg',
+              imgSrc: './assets/bangkok/bangkok-4.jpg',
               latitude: 13.73,
               longitude: 100.52,
               weather: null,
@@ -32,7 +32,7 @@ let cities = [
             {
               index: 2,
               name: 'London',
-              imgSrc: '',
+              imgSrc: './assets/london/london-1.jpg',
               latitude: 51.51,
               longitude: -0.11,
               weather: null,
@@ -41,7 +41,7 @@ let cities = [
             {
               index: 3,
               name: 'Nairobi',
-              imgSrc: '',
+              imgSrc: './assets/nairobi/nairobi-1.jpg',
               latitude: -1.28,
               longitude: 36.81,
               weather: null,
@@ -50,7 +50,7 @@ let cities = [
             {
               index: 4,
               name: 'Los Angeles',
-              imgSrc: '',
+              imgSrc: './assets/los-angeles/los-angeles-1.jpg',
               latitude: 34.05,
               longitude: -118.24,
               weather: null,
@@ -110,7 +110,6 @@ const initData = () => {
 
 
   fetchAllCitiesWeather().then(([milanWeatherData, bangkokWeatherData, londonWeatherData, nairobiWeatherData, losAngelesWeatherData]) => {
-    console.log('cities[0].list => ', cities[0].list);
     for (city of cities[0].list){
       switch(city.name.toLowerCase()){
         case 'milan':
@@ -176,66 +175,10 @@ const getDay = (num) => {
   }
 }
 
-if (window.localStorage.length === 0){
-  fetchAllCitiesWeather().then(data => {
-    const newCurrentCity = data[0];
 
-    const todayInfoCity = document.getElementById('today-info__city');
-    todayInfoCity.textContent = cities[0].list[0].name;
-
-    const todayInfoWeatherStatus = document.getElementById('today-info__weather-status');
-    todayInfoWeatherStatus.textContent = newCurrentCity.current.weather[0].main;
-
-    const todayInfoCurrentTemp = document.getElementById('today-info__current-temp');
-    todayInfoCurrentTemp.textContent = `${Math.round(newCurrentCity.current.temp)}°`;
-
-    const todayInfoMinMaxTemp = document.getElementById('today-info__min-max-temp');
-    todayInfoMinMaxTemp.textContent = `${Math.round(newCurrentCity.daily[0].temp.min)}°/${Math.round(newCurrentCity.daily[0].temp.max)}°`;
-    
-
-    for(let i = 0; i < data[0].daily.length-1; i++){
-      const dayText = document.createElement('h4');
-      dayText.setAttribute('class', 'day__text')
-      dayText.textContent = getDay(i);
-
-      const dayIcon = document.createElement('img');
-      dayIcon.setAttribute('class', 'day-icon');
-      dayIcon.setAttribute('src', `http://openweathermap.org/img/wn/${data[0].daily[i].weather[0].icon}@2x.png`);
-      dayIcon.setAttribute('alt', 'day icon');
-
-      const tempMinMax = document.createElement('span');
-      tempMinMax.setAttribute('class', 'temp__min-max');
-      tempMinMax.textContent = `${Math.round(data[0].daily[i].temp.min)}°/${Math.round(data[0].daily[i].temp.max)}°`;
-      
-      const dayInfo = document.createElement('div');
-      dayInfo.setAttribute('class', 'day__info');
-      dayInfo.appendChild(dayText);
-      dayInfo.appendChild(dayIcon);
-      dayInfo.appendChild(tempMinMax);
-
-      const weatherAppDaysWeek = document.getElementById('weather-app__days-week');
-      weatherAppDaysWeek.appendChild(dayInfo);
-    }
-    
-    window.localStorage.setObj('weatherData', data);
-    window.localStorage.setObj('currentDay', new Date().toISOString().slice(0, 10))
-
-
-    const pastActiveCarousel = document.getElementById(`carousel-state__sensor-${currentIndex + 1 > cities[0].list.length - 1 ? 0 : currentIndex + 1}`);
-    pastActiveCarousel.classList.remove('carousel-active');
-  
-    const nextActiveCarousel = document.getElementById(`carousel-state__sensor-${currentIndex - 1 < 0 ? cities[0].list.length - 1 : currentIndex - 1}`);
-    nextActiveCarousel.classList.remove('carousel-active');
-
-    console.log('localStorage => ', localStorage.getObj('weatherData'));
-  });
-} else {
-
-  console.log('localStorage is not Empty');
-
-  const data = localStorage.getObj('weatherData');
+fetchAllCitiesWeather().then(data => {
   const newCurrentCity = data[0];
-  
+
   const todayInfoCity = document.getElementById('today-info__city');
   todayInfoCity.textContent = cities[0].list[0].name;
 
@@ -246,10 +189,10 @@ if (window.localStorage.length === 0){
   todayInfoCurrentTemp.textContent = `${Math.round(newCurrentCity.current.temp)}°`;
 
   const todayInfoMinMaxTemp = document.getElementById('today-info__min-max-temp');
-  todayInfoMinMaxTemp.textContent = `${Math.round(newCurrentCity.daily[0].temp.min)}°/${Math.round(newCurrentCity.daily[0].temp.max)}°`;
+  todayInfoMinMaxTemp.textContent = `${Math.round(newCurrentCity.daily[0].temp.min)}° / ${Math.round(newCurrentCity.daily[0].temp.max)}°`;
 
-  for(let i = 0; i < data[0].daily.length-1; i++){
 
+  for (let i = 0; i < data[0].daily.length - 1; i++) {
     const dayText = document.createElement('h4');
     dayText.setAttribute('class', 'day__text')
     dayText.textContent = getDay(i);
@@ -262,7 +205,7 @@ if (window.localStorage.length === 0){
     const tempMinMax = document.createElement('span');
     tempMinMax.setAttribute('class', 'temp__min-max');
     tempMinMax.textContent = `${Math.round(data[0].daily[i].temp.min)}°/${Math.round(data[0].daily[i].temp.max)}°`;
-    
+
     const dayInfo = document.createElement('div');
     dayInfo.setAttribute('class', 'day__info');
     dayInfo.appendChild(dayText);
@@ -271,18 +214,16 @@ if (window.localStorage.length === 0){
 
     const weatherAppDaysWeek = document.getElementById('weather-app__days-week');
     weatherAppDaysWeek.appendChild(dayInfo);
-
-
-    const pastActiveCarousel = document.getElementById(`carousel-state__sensor-${currentIndex + 1 > cities[0].list.length - 1 ? 0 : currentIndex + 1}`);
-    pastActiveCarousel.classList.remove('carousel-active');
-  
-    const nextActiveCarousel = document.getElementById(`carousel-state__sensor-${currentIndex - 1 < 0 ? cities[0].list.length - 1 : currentIndex - 1}`);
-    nextActiveCarousel.classList.remove('carousel-active');
-
-    const activeCarousel = document.getElementById(`carousel-state__sensor-${currentIndex}`);
-    activeCarousel.classList.add('carousel-active');
   }
-}
+
+  const activeCarousel = document.getElementById(`carousel-state__sensor-${0}`);
+  activeCarousel.classList.add('carousel-active');
+  console.log('activeCarousel ', activeCarousel)
+
+  document.body.style.backgroundImage = `url(${cities[0].list[0].imgSrc})`;
+
+  console.log('localStorage.length => ', localStorage.length);
+});
 
 const loadCurrentDayData = () => {
   /* START */
@@ -331,7 +272,6 @@ const loadCurrentDayData = () => {
     const tempMinMax = document.createElement('span');
     tempMinMax.setAttribute('class', 'temp__min-max');
     tempMinMax.textContent = `${Math.round(currentCity.weather.daily[i].temp.min)}°/${Math.round(currentCity.weather.daily[i].temp.max)}°`;
-    console.log('currentCity.weather.daily[i].temp.min => ', currentCity.weather.daily[i].temp.min);
 
     const dayInfo = document.createElement('div');
     dayInfo.setAttribute('class', 'day__info');
@@ -347,7 +287,6 @@ const loadCurrentDayData = () => {
 
   const activeCarousel = document.getElementById(`carousel-state__sensor-${currentIndex}`);
   activeCarousel.classList.add('carousel-active');
-  console.log('activeCarousel => ', activeCarousel);
 
   /* END */
 
@@ -382,10 +321,10 @@ const gestureMove = (e) => {
     track.style.transform = `translateX(${diff}px)`;
     console.log("diff => ", diff);
 
-    if (diff < -10) {
+    if (diff < -9) {
       sliderLeftHandler();
       diff = 0;
-    } else if (diff > 10) {
+    } else if (diff > 9) {
       sliderRightHandler();
       diff = 0;
     }

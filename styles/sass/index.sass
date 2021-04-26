@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Abel&family=Maven+Pro&family=Rajdhani&display=swap')
+@import url('https://fonts.googleapis.com/css2?family=PT+Sans&display=swap')
+
 // styles reset
 body, html, h1, h2, h3, p, span, h4
    margin: 0
@@ -11,46 +14,27 @@ body
    background-color: gray
    background-size: cover
    background-repeat: no-repeat
-   // opacity: 0.9
 
 #weather-app
-   // background-color: pink
    width: auto
    height: 100vh
    display: flex
    flex-direction: column
    align-items: center
-   // position: relative   
-   // overflow: hidden
-   // border: 2px solid black
-
-   // #swipe-area
-   //    position: absolute
-   //    top: 10vh
-   //    left: 0
-   //    height: 30vh
-   //    width: 100vw
-   //    // border: 2px solid green 
-   //    // z-index: 1
-      
 
    #weather-app__recap
-      // background-color: lightgreen
       width: 90%
       height: 60%
       margin: 0 auto
       text-align: center
-      // border: 1px solid red
       display: flex
       flex-direction: column
-      // justify-content: center
       align-items: center
 
       #carousel-state
          display: flex
          justify-content: space-evenly
          width: 35%
-         // border: 1px solid green
          margin: 0.5em auto
          height: 1.5em    
          position: relative
@@ -84,7 +68,6 @@ body
          background-color: white
 
       #today-info
-         // border: 1px solid blue
          margin: 3em auto
          width: 100%
          height: 60%
@@ -93,24 +76,26 @@ body
          #today-info__current
             display: flex
             flex-direction: column
+            font-family: 'Prompt', sans-serif
 
             #today-info__city
-               font-size: 1.5em
+               font-size: 1.6em
                margin-bottom: 0.3em
-               font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif
+               font-family: 'Maven Pro', sans-serif
                margin-top: 1em
                font-weight: 200
-               // color: black
 
             #today-info__weather-status
-               font-size: 1.3em
+               font-size: 1.1em
+               font-weight: 300
+               font-family: 'Prompt', sans-serif
+                  
+
             
             #today-info__current-temp
-               font-size: 6em
-               font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
-               // color: black
-
-      
+               font-size: 8em
+               font-weight: 300
+               font-family: 'Maven Pro', sans-serif
    
    #weather-app__days-week
       width: 90%
@@ -118,15 +103,11 @@ body
       display: flex
       flex-direction: row
       margin-top: 8em
-      // grid-template-columns: repeat(7, 1fr)
-      // border: 3px dotted orange
+      font-family: 'Maven Pro', sans-serif
 
       .day__info
-         // grid-column: span 1
          width: 15%
          max-height: 20px
-         // border: 1px solid white
-         // display: inline-block
          display: flex
          flex-direction: column
          align-items: center
@@ -138,100 +119,91 @@ body
          .day-icon
             max-width: 40px
             margin: 0
-            // filter: grayscale(100%)
+            filter: grayscale(100%)
 
          .temp__min-max
             font-size: 0.8em
             font-weight: 400
-
-
-@media screen and ( orientation:  landscape)
-   #weather-app
-      width: auto
-      height: 70vh
-
+            font-family: 'Maven Pro', sans-serif
+ 
 
 
 @media screen and ( min-width:  768px)
    body
       background-size: cover
 
-
-   #weather-app
-      height: 100vh
-      width: 70vw
-      margin: 0 auto
-      display: flex
-      flex-direction: row
-      // border: 1px solid red
-
-      #weather-app__recap
-         // border: 1px solid yellow
-         width: 60vw
-         height: 70vh
-         margin-left: 5em
-         display: grid
-         grid-template-columns: repeat(12, 1fr)
-
-         #carousel-state
-            grid-column: 5/10
-            grid-row: 1
-            width: 300px
-            height: 50px
-            // border: 1px solid orange
-
-            .carousel-state__sensor
-               align-self: center
-               height: 1.4em
-               width: 1.4em
-               border: 2px solid white
-               border-radius: 100%
-               background-color: none
-
-         #left-chevron
-            display: inline-block
-            grid-column: 2/3
-            grid-row: 2
-            width: 80px
-            height: 80px
-            border-radius: 100%
-            background-color: white
-         
-         #left-chevron:hover
-            cursor: pointer
-
-         #right-chevron
-            display: inline-block
-            grid-column: 7/8
-            grid-row: 2
-            width: 80px
-            height: 80px
-            border-radius: 100%
-            background-color: white
-            
-         #right-chevron:hover
-            cursor: pointer
-         
-         #today-info
-            height: 300px
-            grid-column: 4/6
-            grid-row: 2
-
-            #today-info__weather-status
-               height: 40px
-
-         // #today-info__current-temp
-         //    font-size: 2em
-
-      #weather-app__days-week
-         // position: absolute
-         width: 10vw
-         height: 90%
-         margin-right: 8em
-         margin-bottom: 8em
+      #weather-app
+         height: 100vh
+         width: 70vw
+         margin: 0 auto
          display: flex
-         flex-direction: column
-         justify-content: space-evenly
-         align-items: center
-         // border: 1px solid blue
+         flex-direction: row
 
+         #weather-app__recap
+            width: 60vw
+            height: 70vh
+            margin-left: 5em
+            display: grid
+            grid-template-columns: repeat(12, 1fr)
+
+            #carousel-state
+               grid-column: 5/10
+               grid-row: 1
+               width: 300px
+               height: 50px
+
+               .carousel-state__sensor
+                  align-self: center
+                  height: 1.4em
+                  width: 1.4em
+                  border: 2px solid white
+                  border-radius: 100%
+                  background-color: none
+
+            #left-chevron
+               display: inline-block
+               grid-column: 2/3
+               grid-row: 2
+               width: 80px
+               height: 80px
+               border-radius: 100%
+               background-color: white
+            
+            #left-chevron:hover
+               cursor: pointer
+
+            #today-info
+               height: 300px
+               grid-column: 4/8
+               grid-row: 2
+
+               #today-info__weather-status
+                  height: 40px
+
+
+            #right-chevron
+               display: inline-block
+               grid-column: 9/10
+               grid-row: 2
+               width: 80px
+               height: 80px
+               border-radius: 100%
+               background-color: white
+               
+            #right-chevron:hover
+               cursor: pointer
+            
+
+         #weather-app__days-week
+            width: 10vw
+            height: 90%
+            margin-right: 8em
+            margin-bottom: 8em
+            display: flex
+            flex-direction: column
+            justify-content: space-evenly
+            align-items: center
+
+
+
+   
